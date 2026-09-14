@@ -10,7 +10,7 @@ interface EditableFieldProps {
   onSave?: (newValue: string) => void;
 }
 
-export default function EditableField({ initialValue, field: _field, kitId: _kitId, isTextArea, onSave }: EditableFieldProps) {
+export default function EditableField({ initialValue, isTextArea, onSave }: EditableFieldProps) {
   const [value, setValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");

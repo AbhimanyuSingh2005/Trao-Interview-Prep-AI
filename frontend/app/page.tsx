@@ -66,7 +66,7 @@ export default function Home() {
           </div>
           <h3 className="text-2xl font-semibold mb-3">Deep Research</h3>
           <p className="text-textMuted leading-relaxed">
-            Our AI crawls the company's hiring pages and career portals to understand their culture and engineering values.
+            Our AI crawls the company&apos;s hiring pages and career portals to understand their culture and engineering values.
           </p>
         </div>
         

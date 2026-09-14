@@ -24,8 +24,8 @@ export default function Register() {
         throw new Error(data.error || "Registration failed");
       }
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 

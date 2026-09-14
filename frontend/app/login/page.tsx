@@ -24,8 +24,8 @@ export default function Login() {
         throw new Error(data.error || "Login failed");
       }
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -84,7 +84,7 @@ export default function Login() {
           </form>
           
           <div className="mt-6 text-center text-sm text-textMuted">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary hover:text-primary-hover font-medium transition-colors">
               Create one
             </Link>
