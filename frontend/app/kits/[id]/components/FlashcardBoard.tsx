@@ -51,6 +51,7 @@ export default function FlashcardBoard({ initialFlashcards, kitId }: { initialFl
     } catch (err) {
       console.error(err);
       alert('Failed to update flashcard');
+      throw err;
     }
   };
 

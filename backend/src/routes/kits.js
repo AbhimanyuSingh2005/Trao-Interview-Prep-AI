@@ -129,13 +129,22 @@ router.get('/:id/events', requireOwnership, async (req, res) => {
 // Update specific fields (optimistic concurrency support)
 router.patch('/:id/brief', requireOwnership, async (req, res) => {
   const { brief, updatedAt } = req.body;
-  if (new Date(req.kit.updatedAt).getTime() > new Date(updatedAt).getTime()) {
+  if (updatedAt && new Date(req.kit.updatedAt).getTime() > new Date(updatedAt).getTime()) {
     return res.status(409).json({ error: 'Conflict' });
   }
   
-  req.kit.company_brief = brief;
-  req.kit.company_brief._meta.origin = 'edited';
-  req.kit.company_brief._meta.pinned = true;
+  const existingBrief = req.kit.company_brief || {};
+  req.kit.company_brief = {
+    ...existingBrief,
+    ...brief,
+    _meta: {
+      ...(existingBrief._meta || {}),
+      ...(brief?._meta || {}),
+      origin: 'edited',
+      pinned: true
+    }
+  };
+  req.kit.markModified('company_brief');
   await req.kit.save();
   res.json(req.kit);
 });

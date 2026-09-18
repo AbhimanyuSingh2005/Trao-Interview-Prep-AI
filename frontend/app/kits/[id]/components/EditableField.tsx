@@ -4,10 +4,10 @@ import { Pencil, Check, X, Loader2 } from "lucide-react";
 
 interface EditableFieldProps {
   initialValue: string;
-  field: string;
-  kitId: string;
+  field?: string;
+  kitId?: string;
   isTextArea?: boolean;
-  onSave?: (newValue: string) => void;
+  onSave?: (newValue: string) => Promise<void> | void;
 }
 
 export default function EditableField({ initialValue, isTextArea, onSave }: EditableFieldProps) {
@@ -35,17 +35,20 @@ export default function EditableField({ initialValue, isTextArea, onSave }: Edit
 
     setStatus("saving");
     try {
-      // Fake network delay for preview purposes
-      await new Promise(resolve => setTimeout(resolve, 600)); 
+      if (onSave) {
+        await onSave(value);
+      } else {
+        // Fallback delay if no onSave handler provided
+        await new Promise(resolve => setTimeout(resolve, 600)); 
+      }
       
       setStatus("saved");
       setTimeout(() => {
         setStatus("idle");
         setIsEditing(false);
       }, 1500);
-      
-      if (onSave) onSave(value);
-    } catch {
+    } catch (err) {
+      console.error("Failed to save field:", err);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 3000);
     }

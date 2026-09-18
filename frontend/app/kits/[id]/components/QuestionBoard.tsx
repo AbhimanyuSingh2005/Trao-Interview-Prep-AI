@@ -224,6 +224,7 @@ export default function QuestionBoard({ initialQuestions, kitId }: { initialQues
     } catch (err) {
       console.error(err);
       alert('Failed to update question');
+      throw err;
     }
   };
 

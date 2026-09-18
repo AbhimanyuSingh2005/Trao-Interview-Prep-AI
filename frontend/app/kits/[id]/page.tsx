@@ -39,6 +39,24 @@ export default function KitDetail() {
     }
   };
 
+  const handleUpdateBrief = async (field: 'summary' | 'what_they_do', value: string) => {
+    const updatedBrief = {
+      ...(kit.company_brief || {}),
+      [field]: value
+    };
+    const res = await fetch(`/api/kits/${kit._id}/brief`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ brief: updatedBrief, updatedAt: kit.updatedAt })
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || "Failed to update company brief");
+    }
+    const updatedKit = await res.json();
+    setKit(updatedKit);
+  };
+
   useEffect(() => {
     fetch(`/api/kits/${params.id}`)
       .then(res => {
@@ -148,6 +166,7 @@ export default function KitDetail() {
                   field="company_brief.summary" 
                   kitId={kit._id} 
                   isTextArea 
+                  onSave={(val) => handleUpdateBrief('summary', val)}
                 />
               </div>
               
@@ -158,6 +177,7 @@ export default function KitDetail() {
                   field="company_brief.what_they_do" 
                   kitId={kit._id} 
                   isTextArea 
+                  onSave={(val) => handleUpdateBrief('what_they_do', val)}
                 />
               </div>
             </div>
